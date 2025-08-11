@@ -13,17 +13,21 @@ public class Main {
             textArray[i] = sentences[i].trim().split(" ");
             // System.out.println("Sentence " + (i + 1) + ": " + Arrays.toString(textArray[i]));
         }
-
+        System.out.println("Word count: ");
         for (int i = 0; i < textArray.length; i++) {
             for (int j = 0; j < textArray[i].length; j++) {
                 // Convert each word to lowercase and remove punctuation
+                HashMap<String, Integer> wordCount = new HashMap<>();
                 String word = textArray[i][j];
                 String cleanedWord = word.replaceAll("[^a-zA-Z]", "").toLowerCase();    
                 if (!word.isEmpty()) {
                     // Print the unique word
-                    System.out.println("Word[" + i + "," + j + "]: " + word);
-                    System.out.println("Word[" + i + "," + j + "]: " + cleanedWord);
-                }   
+                    wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+                    for (String key : wordCount.keySet()) {
+                        System.out.println(key + ": " + wordCount.get(key));
+                    }
+    
+                }
             }
         }
     }
