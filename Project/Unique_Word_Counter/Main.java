@@ -10,19 +10,19 @@ public class Main {
         String[][] textArray = new String[sentences.length][];
         // Split each sentence into words and store in the 2D array
         for (int i = 0; i < sentences.length; i++) {
-        textArray[i] = sentences[i].trim().split(" ");
+            textArray[i] = sentences[i].trim().split(" ");
+            // System.out.println("Sentence " + (i + 1) + ": " + Arrays.toString(textArray[i]));
         }
 
-        Set<String> uniqueWords = new HashSet<>();
-        for (String[] words : textArray) {
-            for (String word : words) {
+        for (int i = 0; i < textArray.length; i++) {
+            for (int j = 0; j < textArray[i].length; j++) {
+                // Convert each word to lowercase and remove punctuation
+                String word = textArray[i][j];
                 if (!word.isEmpty()) {
-                    uniqueWords.add(word.toLowerCase());
-                }
+                    // Print the unique word
+                    System.out.println("Word[" + i + "," + j + "]: " + word);
+                }   
             }
         }
-
-        System.out.println("Unique word count: " + uniqueWords.size());
-// ...existing code...
     }
 }
