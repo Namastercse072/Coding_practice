@@ -18,9 +18,11 @@ public class Main {
             for (int j = 0; j < textArray[i].length; j++) {
                 // Convert each word to lowercase and remove punctuation
                 String word = textArray[i][j];
+                String cleanedWord = word.replaceAll("[^a-zA-Z]", "").toLowerCase();    
                 if (!word.isEmpty()) {
                     // Print the unique word
                     System.out.println("Word[" + i + "," + j + "]: " + word);
+                    System.out.println("Word[" + i + "," + j + "]: " + cleanedWord);
                 }   
             }
         }
