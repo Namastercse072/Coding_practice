@@ -135,6 +135,75 @@ public class Main {
         String[] parts = nextEvent.split("\\|");
         return "Next event: " + parts[0] + " at " + parts[1];
     }
+    // Command: report
+    private static String reportEvent() {
+        if (events.isEmpty()) return "No events to display";
+        StringBuilder report = new StringBuilder();
+        report.append("=== Event Report ===\n");
+
+        //Sorting event
+        List<String> sorted = new ArrayList<>(events);
+        sorted.sort((e1, e2) -> {
+        String[] p1 = e1.split("\\|");
+        String[] p2 = e2.split("\\|");
+        LocalDateTime d1 = LocalDateTime.parse(p1[1], formatter);
+        LocalDateTime d2 = LocalDateTime.parse(p2[1], formatter);
+        return d2.compareTo(d1);  // ascending order
+    });
+    
+        for (String e : sorted) {
+            String[] parts = e.split("\\|");
+            report.append(parts[1])
+            .append(" - ").append(parts[0])
+            .append(" (").append(parts[2]).append(" minutes)\n");
+        }
+        return report.toString().trim();
+    }
+    // Command: daily
+    private static String daily(String dateStr) {
+        LocalDate date;
+        StringBuilder sb = new StringBuilder("=== Events on ");
+        sb.append(dateStr).append(" ===\n");
+       
+        try {
+            date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (DateTimeParseException e) {
+            return "Error: Invalid date format";
+        }
+
+         //Sorting event
+        List<String> sorted = new ArrayList<>(events);
+        sorted.sort((e1, e2) -> {
+        String[] p1 = e1.split("\\|");
+        String[] p2 = e2.split("\\|");
+        LocalDateTime d1 = LocalDateTime.parse(p1[1], formatter);
+        LocalDateTime d2 = LocalDateTime.parse(p2[1], formatter);
+        return d2.compareTo(d1);  // ascending order
+    });
+    
+        for (String e : sorted) {
+            String[] parts = e.split("\\|");
+            LocalDateTime start = LocalDateTime.parse(parts[1], formatter);
+            sb.append(start.getHour()).append(":").append(start.getMinute())
+                .append(" - ").append(parts[0])
+                .append(" (").append(parts[2]).append(" minutes)\n");
+        }
+        return sb.toString().trim();
+    }
+
+    // Command: summary
+    private static String summaryEvent(){
+        if (events.isEmpty()) return "No event add - So summary is None";
+        StringBuilder sb = new StringBuilder("Total events: ");
+        for (String e : events){
+            String[] parts = e.split("\\|");
+            sb.append(events.size()).append("\n")
+                .append("Next event: ").append(parts[0])
+                .append(" (").append(parts[1]).append(")");
+        }
+       
+        return sb.toString().trim();
+    }
 
     // Main interactive loop
     public static void main(String[] args) {
@@ -170,6 +239,25 @@ public class Main {
                 continue;
             }
 
+            if (input.equals("report")) {
+                System.out.println(reportEvent());                
+                continue;
+            }
+
+            if (input.startsWith("daily")) {
+                String[] parts = input.split(" ");
+                if (parts.length == 2) {
+                    System.out.println(daily(parts[1]));
+                } else {
+                    System.out.println("Error: Invalid date format");
+                }
+                continue;
+            }
+            
+            if (input.equals("summary")) {
+                System.out.println(summaryEvent());                
+                continue;
+            }
             // Otherwise treat input as event creation
             String dateTime = scanner.nextLine();
             String durationStr = scanner.nextLine();
